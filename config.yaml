@@ -1,0 +1,27 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+options:
+  ldap-log-level:
+    description: |
+      log level
+    default: "256"
+    type: string
+  ldap-domain:
+    default: "canonical.dev.com"
+    type: string
+  ldap-organisation:
+    default: "Canonical"
+    type: string
+  ldap-base-dn:
+    default: "dc=canonical,dc=dev,dc=com"
+    type: string
+  ldap-admin-username:
+    default: admin
+    type: string
+  ldap-admin-password:
+    default: admin
+    type: string
+  ldap-tls:
+    default: "false"
+    type: string

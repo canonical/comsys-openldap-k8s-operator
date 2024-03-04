@@ -1,0 +1,32 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+name: comsys-openldap-k8s
+ 
+display-name: Ranger K8s Operator
+
+summary: Kubernetes operator for OpenLDAP
+
+description: |
+ OpenLDAP is an open source implementation of the Lightweight Directory Access Protocol.
+
+maintainers:
+  - Commercial Systems <jaas-crew@lists.canonical.com>
+
+source: "https://github.com/canonical/comsys-openldap-k8s-operator"
+docs: "https://github.com/canonical/comsys-openldap-k8s-operator"
+issues: "https://github.com/canonical/comsys-openldap-k8s-operator/issues"
+
+peers:
+  peer:
+    interface: openldap
+
+containers:
+  openldap:
+    resource: openldap-image
+
+resources:
+  openldap-image:
+    type: oci-image
+    description: OCI image for OpenLDAP
+    upstream-source: osixia/openldap:1.5.0

@@ -1,0 +1,29 @@
+dn: ou=People,dc=canonical,dc=dev,dc=com
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Groups,dc=canonical,dc=dev,dc=com
+objectClass: organizationalUnit
+ou: Groups
+
+dn: cn=Finance,ou=Groups,dc=canonical,dc=dev,dc=com
+objectClass: posixGroup
+cn: Finance
+gidNumber: 5000
+memberUid: dev
+
+dn: cn=Marketing,ou=Groups,dc=canonical,dc=dev,dc=com
+objectClass: posixGroup
+cn: Marketing
+gidNumber: 6000
+
+dn: uid=dev,ou=People,dc=canonical,dc=dev,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Developer
+uid: dev
+givenName: Developer
+sn: example
+userPassword: ubuntu123
