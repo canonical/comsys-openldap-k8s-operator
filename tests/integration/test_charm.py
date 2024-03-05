@@ -34,3 +34,18 @@ class TestDeployment:
             ops_test.model.applications[APP_NAME].units[0].workload_status
             == "active"
         )
+
+    async def test_get_admin_password_action(self, ops_test: OpsTest):
+        """Test the get admin password action.
+
+        Args:
+            ops_test: PyTest object.
+        """
+        action = (
+            await ops_test.model.applications[APP_NAME]
+            .units[0]
+            .run_action("get-admin-password")
+        )
+        response = await action.wait()
+        assert response.results["admin-password"]
+        assert response.results["return-code"] == 0

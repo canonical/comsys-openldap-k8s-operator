@@ -11,8 +11,9 @@ from ops.model import ActiveStatus, BlockedStatus, MaintenanceStatus
 from ops.pebble import ExecError
 
 from literals import APPLICATION_PORT
+from relations.provider import LDAPProvider
 from state import State
-from utils import log_event_handler
+from utils import log_event_handler, random_string
 
 # Log messages can be retrieved using juju debug-log
 logger = logging.getLogger(__name__)
@@ -38,8 +39,12 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         self.framework.observe(self.on.config_changed, self._on_config_changed)
         self.framework.observe(self.on.restart_action, self._on_restart)
         self.framework.observe(
+            self.on.get_admin_password_action, self._on_get_admin_password
+        )
+        self.framework.observe(
             self.on.load_test_users_action, self._on_load_test_users
         )
+        self.provider = LDAPProvider(self)
 
     @log_event_handler(logger)
     def _on_install(self, event):
@@ -84,9 +89,8 @@ class OpenLDAPK8SCharm(ops.CharmBase):
             event.defer()
             return
 
-        admin_user = self.config["ldap-admin-username"]
-        admin_pwd = self.config["ldap-admin-password"]
-        base_dn = self.config["ldap-base-dn"]
+        admin_pwd = self._state.bind_password
+        base_dn = self._state.base_dn
 
         command = [
             "ldapadd",
@@ -94,7 +98,7 @@ class OpenLDAPK8SCharm(ops.CharmBase):
             "-H",
             "ldap://localhost:389",
             "-D",
-            f"cn={admin_user},{base_dn}",
+            f"cn=admin,{base_dn}",
             "-w",
             admin_pwd,
             "-f",
@@ -129,6 +133,15 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         container.restart(self.name)
         event.set_results({"result": "openldap successfully restarted"})
         self.unit.status = ActiveStatus()
+
+    def _on_get_admin_password(self, event):
+        """Get admin password, action handler.
+
+        Args:
+            event:The event triggered by the `get-admin-password` action.
+        """
+        admin_password = self._state.bind_password
+        event.set_results({"admin-password": admin_password})
 
     def validate(self):
         """Validate that configuration and relations are valid and ready.
@@ -165,6 +178,20 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         for key, value in self.config.items():
             updated_key = key.upper().replace("-", "_")
             context[updated_key] = value
+
+        # Set provider values in state
+        self._state.bind_password = self._state.bind_password or random_string(
+            12
+        )
+        self._state.base_dn = self.config["ldap-base-dn"]
+
+        context.update(
+            {
+                "LDAP_ADMIN_PASSWORD": self._state.bind_password,
+                "LDAP_ADMIN_USERNAME": "admin",
+                "LDAP_TLS": "false",
+            }
+        )
 
         logger.info("planning openldap execution")
         pebble_layer = {

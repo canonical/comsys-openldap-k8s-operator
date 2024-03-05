@@ -6,3 +6,6 @@ restart:
 
 load-test-users:
     description: Loads test groups and users for development.
+
+get-admin-password:
+    description: Provides password for the admin user.

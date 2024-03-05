@@ -25,6 +25,10 @@ containers:
   openldap:
     resource: openldap-image
 
+provides:
+  ldap:
+    interface: ldap
+
 resources:
   openldap-image:
     type: oci-image

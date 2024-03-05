@@ -4,6 +4,8 @@
 """Define helpers methods."""
 
 import functools
+import secrets
+import string
 
 
 def log_event_handler(logger):
@@ -49,3 +51,20 @@ def log_event_handler(logger):
         return decorated
 
     return decorator
+
+
+def random_string(length) -> str:
+    """Create randomized string for use as app password.
+
+    Args:
+        length: number of characters to generate
+
+    Returns:
+        String of randomized letter+digit characters
+    """
+    return "".join(
+        [
+            secrets.choice(string.ascii_letters + string.digits)
+            for _ in range(length)
+        ]
+    )

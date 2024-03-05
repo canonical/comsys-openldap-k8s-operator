@@ -2,6 +2,11 @@
 # See LICENSE file for licensing details.
 
 options:
+  charm-deployment-name:
+    description: |
+      The name of the deployed application
+    default: comsys-openldap-k8s
+    type: string
   ldap-log-level:
     description: |
       log level
@@ -15,13 +20,4 @@ options:
     type: string
   ldap-base-dn:
     default: "dc=canonical,dc=dev,dc=com"
-    type: string
-  ldap-admin-username:
-    default: admin
-    type: string
-  ldap-admin-password:
-    default: admin
-    type: string
-  ldap-tls:
-    default: "false"
     type: string

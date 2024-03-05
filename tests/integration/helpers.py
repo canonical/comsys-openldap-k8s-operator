@@ -13,7 +13,7 @@ from pytest_operator.plugin import OpsTest
 logger = logging.getLogger(__name__)
 
 
-APP_NAME = "openldap-k8s"
+APP_NAME = "comsys-openldap-k8s"
 METADATA = yaml.safe_load(Path("./metadata.yaml").read_text())
 
 
