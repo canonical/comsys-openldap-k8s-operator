@@ -141,9 +141,7 @@ class TestCharm(TestCase):
         container.get_check.return_value.status = CheckStatus.UP
         harness.charm.on.update_status.emit()
 
-        self.assertEqual(
-            harness.model.unit.status, ActiveStatus()
-        )
+        self.assertEqual(harness.model.unit.status, ActiveStatus())
 
     def test_update_relation_data(self):
         """Test the relation provider."""
