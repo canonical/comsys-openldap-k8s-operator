@@ -105,7 +105,7 @@ class TestCharm(TestCase):
         # The MaintenanceStatus is set with replan message.
         self.assertEqual(
             harness.model.unit.status,
-            ActiveStatus("Status check: UP"),
+            ActiveStatus(),
         )
 
     def test_config_changed(self):
@@ -127,7 +127,7 @@ class TestCharm(TestCase):
         # The ActiveStatus is set with replan message.
         self.assertEqual(
             harness.model.unit.status,
-            ActiveStatus("Status check: UP"),
+            ActiveStatus(),
         )
 
     def test_update_status_up(self):
@@ -142,7 +142,7 @@ class TestCharm(TestCase):
         harness.charm.on.update_status.emit()
 
         self.assertEqual(
-            harness.model.unit.status, ActiveStatus("Status check: UP")
+            harness.model.unit.status, ActiveStatus()
         )
 
     def test_update_relation_data(self):

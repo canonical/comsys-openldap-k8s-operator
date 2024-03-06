@@ -100,7 +100,9 @@ juju deploy ./openldap-k8s_ubuntu-22.04-amd64.charm --resource openldap-image=os
 juju status
 ```
 ## Relations
-There are currently no supported relations. Set the binddn and other parameters using `juju config openldap-k8s <key>=<value>`
+The OpenLDAP charm can provide the ldap_url, base_dn and admin_password via relation with another charm with the `ldap` interface. 
+
+Set the values of these parameters using `juju config comsys-openldap-k8s <key>=<value>`
 
 
 ```

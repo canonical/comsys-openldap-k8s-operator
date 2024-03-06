@@ -81,7 +81,7 @@ class OpenLDAPK8SCharm(ops.CharmBase):
             event: The `load-test-users` action event.
 
         Raises:
-            ExecError: In case of error during keytool certificate import
+            ExecError: In case of error during ldapadd.
         """
         self.unit.status = MaintenanceStatus("Running action.")
         container = self.unit.get_container(self.name)
@@ -116,6 +116,7 @@ class OpenLDAPK8SCharm(ops.CharmBase):
             self.unit.status = ActiveStatus()
         except ExecError as e:
             logger.error(e.stdout)
+            self.unit.status = ActiveStatus()
             raise
 
     def _on_restart(self, event):
@@ -209,7 +210,7 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         container.add_layer(self.name, pebble_layer, combine=True)
         container.replan()
 
-        self.unit.status = ActiveStatus("Status check: UP")
+        self.unit.status = ActiveStatus()
 
 
 if __name__ == "__main__":  # pragma: nocover
