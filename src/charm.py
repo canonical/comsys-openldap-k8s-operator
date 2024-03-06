@@ -73,6 +73,26 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         """
         self.update(event)
 
+    def _create_startup_ldif(self, event, container):
+        """Create startup.ldif file.
+
+        Args:
+            event: The load-test-users action event.
+            container: OpenLDAP container.
+
+        Raise:
+            ExecError: In case fail to create `startup.ldif`
+        """
+        ldif_content = event.params["ldif"]
+        command = ["echo", ldif_content, ">", "startup.ldif"]
+        try:
+            container.exec(
+                command, working_dir="/templates", service_context="openldap"
+            )
+        except ExecError as e:
+            logger.error(e.stdout)
+            raise
+
     @log_event_handler(logger)
     def _on_load_test_users(self, event):
         """Handle loading of test users and groups.
@@ -88,6 +108,13 @@ class OpenLDAPK8SCharm(ops.CharmBase):
         if not container.can_connect():
             event.defer()
             return
+
+        if event.params.get("ldif"):
+            try:
+                self._create_startup_ldif(event, container)
+            except ExecError as e:
+                logger.error(e.stdout)
+                raise
 
         admin_pwd = self._state.bind_password
         base_dn = self._state.base_dn
