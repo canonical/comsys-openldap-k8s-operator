@@ -1,0 +1,16 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+restart:
+    description: Restart the application server.
+
+load-test-users:
+    description: Loads test groups and users for development.
+    params:
+        ldif:
+            description: |
+                The ldif file of users and groups to be created in the LDAP.
+            type: string
+
+get-admin-password:
+    description: Provides password for the admin user.

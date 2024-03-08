@@ -1,0 +1,23 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+options:
+  charm-deployment-name:
+    description: |
+      The name of the deployed application
+    default: comsys-openldap-k8s
+    type: string
+  ldap-log-level:
+    description: |
+      log level
+    default: "256"
+    type: string
+  ldap-domain:
+    default: "canonical.dev.com"
+    type: string
+  ldap-organisation:
+    default: "Canonical"
+    type: string
+  ldap-base-dn:
+    default: "dc=canonical,dc=dev,dc=com"
+    type: string
